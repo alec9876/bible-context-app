@@ -4,8 +4,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { BibleStackScreen } from './service/Navigation';
+import { DoctrineStackScreen } from './service/Navigation';
 import HomeScreen from './src/components/HomeScreen';
-import DoctrineScreen from './src/components/DoctrineScreen';
 import MoreScreen from './src/components/MoreScreen';
 
 
@@ -45,7 +45,7 @@ export default function App() {
         })}>
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Bible" component={BibleStackScreen} />
-        <Tab.Screen name="Doctrine" component={DoctrineScreen} />
+        <Tab.Screen name="Doctrine" component={DoctrineStackScreen} />
         <Tab.Screen name="More" component={MoreScreen} />
       </Tab.Navigator>
       <StatusBar style="light" />

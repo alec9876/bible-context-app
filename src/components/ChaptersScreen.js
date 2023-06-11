@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Pressable, ScrollView } from "react-native";
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
-import { db } from "../../firebaseConfig";
+import { db } from "../../firebase/firebaseConfig";
 
 const ChaptersScreen = ({ route, navigation }) => {
     const { itemId, collectionRef, bookName } = route.params;
@@ -32,7 +32,8 @@ const ChaptersScreen = ({ route, navigation }) => {
                                 <Pressable
                                     onPress={() => navigation.navigate('Scripture', {
                                         chapter: item.Chapter, 
-                                        bookName: bookName, name: `${bookName} ${item.Chapter}`, endChapter: chapters.length})}>
+                                        bookName: bookName, name: `${bookName} ${item.Chapter}`, 
+                                        endChapter: chapters.length})}>
                                     <Text style={styles.chapterNumber}>{item.Chapter}</Text>
                                 </Pressable>
                             </View>

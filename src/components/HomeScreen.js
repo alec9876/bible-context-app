@@ -1,9 +1,9 @@
-import { collection, getDocs, onSnapshot } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from 'react-native';
-import { db } from "../../firebaseConfig";
+import { db } from "../../firebase/firebaseConfig";
 import { Card } from '@rneui/themed';
-import { getAPIVerse } from "../../service/APICalls";
+import { getAPIMemoryVerse } from "../../service/APICalls";
 
 const HomeScreen = () => {
 
@@ -16,7 +16,7 @@ const HomeScreen = () => {
             const mapData = data.docs.map((doc) => ({...doc.data(), id: doc.id }));
             const randomIndex = Math.floor(Math.random() * mapData.length);
             const item = mapData[randomIndex];
-            const result = await getAPIVerse(item.BookName, item.Verse);
+            const result = await getAPIMemoryVerse(item.BookName, item.Verse);
             setMemoryVerses(result);
         };
         getVerses();

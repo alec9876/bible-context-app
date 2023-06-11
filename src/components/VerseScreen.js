@@ -1,9 +1,7 @@
-import { collection, getDocs, onSnapshot } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { Pressable, ScrollView } from "react-native";
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
-import { db } from "../../firebaseConfig";
 import { getAPIVerse } from "../../service/APICalls";
 import { FontAwesome5 } from '@expo/vector-icons';
 import { StackActions } from '@react-navigation/native';
@@ -12,12 +10,10 @@ import { StackActions } from '@react-navigation/native';
 const VerseScreen = ({ navigation, route }) => {
     const { chapter, bookName, endChapter } = route.params;
     const [verses, setVerses] = useState([]);
-    const [nextChapter, setNextChapter] = useState(parseInt(chapter));
+    const [nextChapter, setNextChapter] = useState(
+        nextChapter === undefined ? chapter : nextChapter);
 
     const getChapter = async (currentChapter) => {
-        if (currentChapter === undefined) {
-            currentChapter = parseInt(chapter);
-        }
         const scripture = await getAPIVerse(bookName, currentChapter);
         setVerses(scripture);
     }
@@ -29,7 +25,7 @@ const VerseScreen = ({ navigation, route }) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            {nextChapter < 50 ? (
+            {nextChapter < endChapter ? (
             <View style={styles.rightIcon}>
                 <Pressable 
                     onPress={async () => getChapter(setNextChapter(parseInt(nextChapter) + 1))}
@@ -113,6 +109,7 @@ const styles = StyleSheet.create({
     },
     middleButtonText: {
         fontSize: 15,
+        fontWeight: 'bold',
         color: 'black',
         padding: 10,
         alignItems: 'center'
