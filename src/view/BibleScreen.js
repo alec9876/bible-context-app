@@ -4,7 +4,7 @@ import Constants from 'expo-constants';
 import { StyleSheet, Text, View, Pressable, SafeAreaView } from 'react-native';
 import { db } from "../../firebase/firebaseConfig";
 import { ScrollView } from "react-native";
-import BibleModalScreen from "./BibleModalScreen";
+import BibleModalScreen from "../components/BibleModalScreen";
 import { FontAwesome } from '@expo/vector-icons';
 import Modal from 'react-native-modal';
 

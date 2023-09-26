@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { db } from "../../firebase/firebaseConfig";
+import { db } from "../../../firebase/firebaseConfig";
 import Constants from 'expo-constants';
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -30,7 +30,7 @@ function DoctrineScreen({ navigation }) {
                                 style={styles.box}>
                                 <Pressable
                                     style={styles.pressableStyle}
-                                    onPress={() => navigation.navigate('SubDoctrine', {
+                                    onPress={() => navigation.navigate('FirstSubDoctrine', {
                                         itemId: item.id,
                                         collectionRef: 'Doctrine',
                                         subject: item.Subject,

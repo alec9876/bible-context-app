@@ -16,7 +16,7 @@ export const getAPIVerse = async (book, verse) => {
         const json  = await response.json();
         return json;
     } catch (error) {
-        console.error(error);
+        console.error("API error",error);
     }
 }
 
@@ -32,6 +32,6 @@ export const getAPIMemoryVerse = async (book, verse) => {
         const json  = await response.json();
         return json;
     } catch (error) {
-        console.error(error);
+        console.error("API Memory Verse",error);
     }
 }

@@ -5,8 +5,8 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { BibleStackScreen } from './service/Navigation';
 import { DoctrineStackScreen } from './service/Navigation';
-import HomeScreen from './src/components/HomeScreen';
-import MoreScreen from './src/components/MoreScreen';
+import HomeScreen from './src/view/HomeScreen';
+import MoreScreen from './src/view/MoreScreen';
 
 
 

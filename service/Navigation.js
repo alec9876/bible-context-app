@@ -1,14 +1,14 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import BibleScreen from '../src/components/BibleScreen';
-import ChaptersScreen from '../src/components/ChaptersScreen';
-import SectionsScreen from '../src/components/SectionsScreen';
+import BibleScreen from '../src/view/BibleScreen';
+import ChaptersScreen from '../src/view/ChaptersScreen';
+import SectionsScreen from '../src/view/SectionsScreen';
 import VerseScreen from '../src/components/VerseScreen';
 import VerseSectionScreen from '../src/components/VerseSectionScreen';
 
-import DoctrineScreen from '../src/components/DoctrineScreen';
-import SubDoctrineScreen from '../src/components/SubDoctrineScreen';
-import SubDoctrineDetailScreen from '../src/components/SubDoctrineDetailScreen';
+import DoctrineScreen from '../src/view/DoctrineScreens/DoctrineScreen';
+import FirstSubDoctrineScreen from '../src/view/DoctrineScreens/FirstSubDoctrineScreen';
+import SecondSubDoctrineScreen from '../src/view/DoctrineScreens/SecondSubDoctrineScreen';
 
 //Bible Screen Navigation Stack
 export const BibleStackScreen = () => {
@@ -79,8 +79,8 @@ export const DoctrineStackScreen = () => {
                     headerTintColor: 'white'
             })}  />
             <DoctrineStack.Screen
-                name="SubDoctrine" 
-                component={SubDoctrineScreen} 
+                name="FirstSubDoctrine" 
+                component={FirstSubDoctrineScreen} 
                 options={({route}) => ({
                     title: route.params.name,
                     headerStyle: {
@@ -88,16 +88,6 @@ export const DoctrineStackScreen = () => {
                     },
                     headerTintColor: 'white'
             })}  />
-            <DoctrineStack.Screen
-                name="SubDoctrineDetail"
-                component={SubDoctrineDetailScreen}
-                options={({route}) => ({
-                    title: route.params.name,
-                    headerStyle: {
-                        backgroundColor: '#333'
-                    },
-                    headerTintColor: 'white'
-            })} />
         </DoctrineStack.Navigator>
     )
 }

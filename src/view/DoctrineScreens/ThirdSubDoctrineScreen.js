@@ -1,25 +1,23 @@
-import React, { useEffect, useState } from "react";
-import { db } from "../../firebase/firebaseConfig";
-import Constants from 'expo-constants';
+import { useState, useEffect } from "react";
+import { db } from "../../../firebase/firebaseConfig";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 
-
-const SubDoctrineScreen = ({ route, navigation }) => {
-    const { itemId, collectionRef} = route.params;
+const ThirdSubDoctrine = (route) => {
+    const { doctrineId, doctrineRef, subDoctrineId, subDoctrineRef, topic } = route.params;
     const [doctrine, setDoctrine] = useState([]);
-    const subDocRef = collection(db, collectionRef, itemId, 'SubDoctrine');
+    const subDocRef = collection(db, doctrineRef, doctrineId, subDoctrineRef, subDoctrineId, topic);
 
-    getSubDoctrine = async () => {
+    getDoctrine = async () => {
         const q = query(subDocRef, orderBy('Topic'));
         const data = await getDocs(q);
-        const mapData = data.docs.map((doc) => ({...doc.data(), id: doc.id }));
+        const mapData = data.docs.map((doc) => ({...doc.data(), id: doc.id}));
         setDoctrine(mapData);
     }
 
     useEffect(() => {
-        getSubDoctrine();
-    }, []);
+        getDoctrine();
+    })
 
     return (
         <SafeAreaView style={styles.container}>
@@ -30,19 +28,19 @@ const SubDoctrineScreen = ({ route, navigation }) => {
                         <View key={item.id}
                               style={styles.box}>
                             <Pressable
-                                style={styles.pressableStyle}
-                                onPress={() => navigation.navigate('SubDoctrineDetail', {
-                                    doctrineId: itemId,
-                                    subDoctrineId: item.id,
-                                    doctrineRef: 'Doctrine',
-                                    subDoctrineRef: 'SubDoctrine',
-                                    topic: item.Topic,
-                                    name: `${item.Topic}`,
-                                })}>
+                                style={styles.pressableStyle}>
                                 <Text style={styles.titleStyle}>
                                     {item.Topic}
                                 </Text>
                             </Pressable>
+                            {item.Reference.map((unit) => {
+                            <Pressable
+                                style={styles.pressableStyle}>
+                                <Text style={styles.verseStyle}>
+                                    {unit.Topic}
+                                </Text>
+                            </Pressable>
+                            })}
                         </View>
                     )
                 })}
@@ -89,4 +87,4 @@ const styles = StyleSheet.create({
     }  
 });
 
-export default SubDoctrineScreen;
+export default ThirdSubDoctrine;
