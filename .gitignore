@@ -10,8 +10,8 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
-#service/my_api_key.js
-#firebase/
+service/my_api_key.js
+firebase/
 
 # macOS
 .DS_Store
