@@ -8,7 +8,6 @@ import VerseSectionScreen from '../src/components/VerseSectionScreen';
 
 import DoctrineScreen from '../src/view/DoctrineScreens/DoctrineScreen';
 import FirstSubDoctrineScreen from '../src/view/DoctrineScreens/FirstSubDoctrineScreen';
-import SecondSubDoctrineScreen from '../src/view/DoctrineScreens/SecondSubDoctrineScreen';
 
 //Bible Screen Navigation Stack
 export const BibleStackScreen = () => {
