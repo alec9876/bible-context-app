@@ -1,16 +1,12 @@
-import { useNavigation } from "@react-navigation/native";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View, Pressable } from 'react-native';
 import { db } from "../../firebase/firebaseConfig";
 
-import VerticalSections from "../components/VerticalSectionsScreen";
-
-const SectionsScreen = ({ route }) => {
+const SectionsScreen = ({ navigation, route }) => {
     const { itemId, collectionRef, bookName } = route.params;
     const [sections, setSections] = useState([]);
     const sectionRef = collection(db, collectionRef, itemId, 'Sections');
-    const navigation = useNavigation();
 
     const getSections = async () => {
         const q = query(sectionRef, orderBy("Order"));
@@ -26,10 +22,28 @@ const SectionsScreen = ({ route }) => {
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
-                <VerticalSections sections = {sections}
-                                  bookName = {bookName}
-                                  navigation = {navigation}
-                />
+                <View>
+                    {sections.map((item) => {
+                        return (
+                            <View key={item.id}
+                                  style={styles.box}>
+                                <Pressable
+                                    style={styles.pressableStyle}
+                                    onPress={() => navigation.navigate('Sections Scripture', {
+                                        chapter: item.Verses, 
+                                        bookName: bookName, name: `${bookName} ${item.Verses}`,
+                                        endChapter: item.Length})}>
+                                    <Text style={styles.titleStyle}>
+                                        {item.Title}
+                                    </Text>
+                                    <Text style={styles.verseStyle}>
+                                        {item.BookName} {item.Verses}
+                                    </Text>
+                                </Pressable>
+                            </View>
+                        );
+                    })}
+                </View>
             </ScrollView>
         </SafeAreaView>
     )
