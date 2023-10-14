@@ -3,14 +3,17 @@ import { db } from "../../../firebase/firebaseConfig";
 import Constants from 'expo-constants';
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
-import Accordion from 'react-native-collapsible/Accordion';
-import * as Animatable from 'react-native-animatable';
+import HorizontalSections from "./HorizontalSectionsScreen";
+import VerticalSections from "./VerticalSectionsScreen";
 
-const FirstSubDoctrine = ({ route, navigation }) => {
+const FirstSubDoctrine = ({ route }) => {
     const { itemId, collectionRef} = route.params;
     const [doctrine, setDoctrine] = useState([]);
     const [activeSections, setActiveSections] = useState([]);
     const subDocRef = collection(db, collectionRef, itemId, 'SubDoctrine');
+
+    verticalSections = () => this.setState({ vertical: true});
+    horizontalSections = () => this.setState({ vertical: false});
 
     getSubDoctrine = async () => {
         const q = query(subDocRef, orderBy('Topic'));
@@ -18,68 +21,14 @@ const FirstSubDoctrine = ({ route, navigation }) => {
         const mapData = data.docs.map((doc) => ({...doc.data(), id: doc.id}));
         setDoctrine(mapData);
     }
-
-    const setSections = (sections) => {
-        //setting up a active section state
-        setActiveSections(sections);
-      };
-
-    const renderHeader = (section, _, isActive) => {
-        //Accordion Header view
-        return (
-          <View style={styles.box}>
-            <Text style={styles.titleStyle}>{section.Topic}</Text>
-          </View>
-        );
-      };
     
-      const renderContent = (item, _, isActive) => {
-        return(
-            <View style={styles.dropBox}>
-                {item.Reference && <>
-                {item.Reference.map((item, index) => {
-                return (
-                    <View key={index}>
-                        <Text style={styles.topicStyle}>{item.Topic}</Text>
-                        {item.Verses &&
-                            <Text style={styles.verseStyle}>{item.Verses.join("|").toString().split("|").join("\n")}</Text>}
-                        {item.Reference && <>
-                        {item.Reference.map((item, index) => {
-                            return(
-                            <View key={index}>
-                                <Text style={styles.subTopicStyle}>{item.SubTopic}</Text>
-                                {item.Verses &&
-                                <Text style={styles.subVerseStyle}>{item.Verses.join("|").toString().split("|").join("\n")}</Text>}
-                            </View>
-                            )
-                        })}
-                        </>}
-                    </View>
-                    );
-                })}
-                </>} 
-          </View>
-          )
-      };
-
     useEffect(() => {
         getSubDoctrine();
     }, []);
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.statusBarMargin}>
-                <ScrollView>
-                    <Accordion
-                        activeSections={activeSections}
-                        sections={doctrine}
-                        renderHeader={renderHeader}
-                        renderContent={renderContent}
-                        duration={400}
-                        onChange={setSections}
-                    />
-                </ScrollView>
-            </View>
+            <VerticalSections doctrine={doctrine} activeSections={activeSections} />
         </SafeAreaView>
     )
 }
