@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     },
     iconBackground: {
         backgroundColor: 'black',
-        height: windowHeight * 0.09
+        height: windowHeight * 0.1
     }
 });
 
