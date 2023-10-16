@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Pressable, ScrollView } from "react-native";
+import { Pressable, ScrollView, Dimensions } from "react-native";
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { getAPIVerse } from "../../service/APICalls";
 import { FontAwesome5 } from '@expo/vector-icons';
 import { StackActions } from '@react-navigation/native';
 
+const { height: windowHeight } = Dimensions.get("window");
 
 const VerseScreen = ({ navigation, route }) => {
     const { chapter, bookName, endChapter } = route.params;
@@ -25,31 +26,6 @@ const VerseScreen = ({ navigation, route }) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            {nextChapter < endChapter ? (
-            <View style={styles.rightIcon}>
-                <Pressable 
-                    onPress={async () => getChapter(setNextChapter(parseInt(nextChapter) + 1))}
-                    style={styles.iconButton}>
-                    <FontAwesome5 name="arrow-circle-right" size={35} color="#333" />
-                </Pressable>
-            </View>
-            ) : null}
-            {nextChapter > 1 ? (
-            <View style={styles.leftIcon}>
-                <Pressable 
-                    onPress={async () => getChapter(setNextChapter(parseInt(nextChapter) - 1))}
-                    style={styles.iconButton}>
-                    <FontAwesome5 name="arrow-circle-left" size={35} color="#333"/>
-                </Pressable>
-            </View>
-            ) : null}
-            <View style={styles.middleButtonStyle}>
-                <Pressable 
-                    onPress={async () => navigation.dispatch(StackActions.popToTop())}
-                    style={styles.middleButton}>
-                    <Text style={styles.middleButtonText}>Back to Book Selection</Text>
-                </Pressable>
-            </View>
             <ScrollView>
                 <View>
                     <Text style={styles.fontStyle}>
@@ -57,6 +33,33 @@ const VerseScreen = ({ navigation, route }) => {
                     </Text>
                 </View>
             </ScrollView>
+            <View style={styles.iconBackground}>
+                {nextChapter < endChapter ? (
+                <View style={styles.rightIcon}>
+                    <Pressable 
+                        onPress={async () => getChapter(setNextChapter(parseInt(nextChapter) + 1))}
+                        style={styles.iconButton}>
+                        <FontAwesome5 name="arrow-circle-right" size={35} color="#333" />
+                    </Pressable>
+                </View>
+                ) : null}
+                {nextChapter > 1 ? (
+                <View style={styles.leftIcon}>
+                    <Pressable 
+                        onPress={async () => getChapter(setNextChapter(parseInt(nextChapter) - 1))}
+                        style={styles.iconButton}>
+                        <FontAwesome5 name="arrow-circle-left" size={35} color="#333"/>
+                    </Pressable>
+                </View>
+                ) : null}
+                <View style={styles.middleButtonStyle}>
+                    <Pressable 
+                        onPress={async () => navigation.dispatch(StackActions.popToTop())}
+                        style={styles.middleButton}>
+                        <Text style={styles.middleButtonText}>Back to Book Selection</Text>
+                    </Pressable>
+                </View>
+            </View>
         </SafeAreaView>
     );
 }
@@ -76,14 +79,12 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 15,
         right: 25,
-        zIndex: 1,
         borderRadius: 20
     },
     leftIcon: {
         position: 'absolute',
         bottom: 15,
         left: 25,
-        zIndex: 1,
     },
     iconButton: {
         backgroundColor: 'white',
@@ -94,7 +95,6 @@ const styles = StyleSheet.create({
     },
     middleButtonStyle: {
         position: 'absolute',
-        zIndex: 1,
         bottom: 15,
         left: 107.5,
     },
@@ -113,6 +113,10 @@ const styles = StyleSheet.create({
         color: 'black',
         padding: 10,
         alignItems: 'center'
+    },
+    iconBackground: {
+        backgroundColor: 'black',
+        height: windowHeight * 0.09
     }
 });
 
