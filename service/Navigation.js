@@ -1,5 +1,8 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import LoginScreen from '../src/view/LoginScreen';
+import RegistrationScreen from '../src/view/RegistrationScreen';
+
 import BibleScreen from '../src/view/BibleScreen';
 import ChaptersScreen from '../src/view/ChaptersScreen';
 import SectionsScreen from '../src/view/SectionsScreen';
