@@ -78,12 +78,11 @@ export default function App() {
           <Tab.Screen name="More" component={MoreScreen} />
       </Tab.Navigator>
     ) : (
-      <EmailVerifyScreen />
-      // <Stack.Navigator screenOptions={{headerShown: false}}>
-      //     <Stack.Screen name="Login" component={LoginScreen} />
-      //     <Stack.Screen name="Registration" component={RegistrationScreen} />
-      //     <Stack.Screen name="EmailVerify" component={EmailVerifyScreen} />
-      // </Stack.Navigator>
+      <Stack.Navigator screenOptions={{headerShown: false}}>
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Registration" component={RegistrationScreen} />
+          <Stack.Screen name="EmailVerify" component={EmailVerifyScreen} />
+      </Stack.Navigator>
     )}
     </NavigationContainer>
 
