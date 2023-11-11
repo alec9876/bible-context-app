@@ -7,7 +7,6 @@ export const register = async (email, password) => {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         await emailVerification();
         const user = userCredential.user;
-        console.log("User registered", user);
         return user;
     } catch(error) {
         throw error;

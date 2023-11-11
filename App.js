@@ -9,7 +9,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { createStackNavigator  } from '@react-navigation/stack';
 
-import { BibleStackScreen, UserStackScreen } from './service/Navigation';
+import { BibleStackScreen } from './service/Navigation';
 import { DoctrineStackScreen } from './service/Navigation';
 import HomeScreen from './src/view/HomeScreen';
 import MoreScreen from './src/view/MoreScreen';
@@ -84,6 +84,7 @@ export default function App() {
           <Stack.Screen name="EmailVerify" component={EmailVerifyScreen} />
       </Stack.Navigator>
     )}
+    <StatusBar style='light'/>
     </NavigationContainer>
 
 

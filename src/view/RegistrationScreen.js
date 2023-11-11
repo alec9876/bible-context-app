@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import { View, Dimensions, StyleSheet, SafeAreaView, Text, TextInput, ActivityIndicator, Button } from 'react-native';
 import { register } from '../../service/authServices';
 import { db } from "../../firebase/firebaseConfig";
+import { doc, setDoc } from 'firebase/firestore';
 import EmailVerifyScreen from './EmailVerifyScreen';
 import { useNavigation } from '@react-navigation/native';
 
@@ -17,13 +18,11 @@ function RegistrationScreen() {
 
     const setData = async (firstName, lastName, email, id) => {
         try{
-            console.log("setData");
-            db.ref("Users").set({
+            setDoc(doc(db, "Users", id), {
                 FirstName: firstName,
                 LastName: lastName,
-                Email: email,
-                id: id
-            }).then(() => console.log("Data set"));
+                Email: email
+            });
         } catch (error) {
             console.log("DataError", error);
             throw error;
@@ -38,8 +37,8 @@ function RegistrationScreen() {
         setLoading(true);
         try {
             const newUser = await register(email, password);
-            //setData(firstName, lastName, email, newUser.id);
             if (newUser) {
+                await setData(firstName, lastName, email, newUser.uid);
                 setLoading(false);
                 setEmailVerify(true);
             }
