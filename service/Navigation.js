@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import LoginScreen from '../src/view/LoginScreen';
 import RegistrationScreen from '../src/view/RegistrationScreen';
+import EmailVerifyScreen from '../src/view/EmailVerifyScreen';
 
 import BibleScreen from '../src/view/BibleScreen';
 import ChaptersScreen from '../src/view/ChaptersScreen';

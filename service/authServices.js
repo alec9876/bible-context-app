@@ -1,8 +1,18 @@
 import React from 'react';
-import { sendEmailVerification, signOut, signInWithEmailAndPassword } from 'firebase/auth';
+import { sendEmailVerification, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from "../firebase/authConfig";
 
-
+export const register = async (email, password) => {
+    try{
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        await emailVerification();
+        const user = userCredential.user;
+        console.log("User registered", user);
+        return user;
+    } catch(error) {
+        throw error;
+    }
+}
 
 export const login = async (email, password) => {
     try {
@@ -31,6 +41,6 @@ export const emailVerification = async () => {
 
 export const logout = async () => {
     signOut(auth).then(() => {
-
+        console.log("user signed out");
     });
 }

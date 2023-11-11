@@ -1,22 +1,29 @@
 import React, { useState } from 'react';
-import { StatusBar } from 'expo-status-bar';
 import { Dimensions, ActivityIndicator, Button, StyleSheet, View, Text, TextInput, SafeAreaView } from 'react-native';
-import {login, emailVerification, logout} from '../../service/authServices';
+import { login, emailVerification, logout } from '../../service/authServices';
 import { auth } from '../../firebase/authConfig';
+import { useNavigation } from '@react-navigation/native';
 
 function LoginScreen() {
     const [email, setEmail] = useState();
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
+    const navigation = useNavigation();
+
+    const handleRegister = async () => {
+        navigation.navigate("Registration");
+    }
 
     const handleLogin = async () => {
         setLoading(true);
         try {
             const user = await login(email, password);
-            console.log("user", user.emailVerified);
             if (user.emailVerified) {
                 setLoading(false);
-                auth.currentUser.reload();
+            } else {
+                logout();
+                setLoading(false);
+                alert("Please verify your email before loggin in.");
             }
         } catch (error) {
             setLoading(false);
@@ -34,7 +41,7 @@ function LoginScreen() {
     return(
         <SafeAreaView style={styles.container}>
             <View style={styles.items}>
-                <Text style={styles.title}>Welcome to BibleContext</Text>
+                <Text style={styles.title}>Login</Text>
                 <View style={styles.inputView}>
                     <TextInput
                         style={styles.inputText}
@@ -63,11 +70,11 @@ function LoginScreen() {
                             color='salmon'/>
                     <View style={styles.space} />
                     <Button title="Create Account" 
-                            color="salmon"/>
+                            color="salmon"
+                            onPress={handleRegister}/>
                     </>
                 )}
             </View>
-            <StatusBar style="light" />
         </SafeAreaView>
     )
 }
