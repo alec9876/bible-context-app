@@ -1,9 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import LoginScreen from '../src/view/LoginScreen';
-import RegistrationScreen from '../src/view/RegistrationScreen';
-import EmailVerifyScreen from '../src/view/EmailVerifyScreen';
-
 import BibleScreen from '../src/view/BibleScreen';
 import ChaptersScreen from '../src/view/ChaptersScreen';
 import SectionsScreen from '../src/view/SectionsScreen';
@@ -12,6 +8,9 @@ import VerseSectionScreen from '../src/components/VerseSectionScreen';
 
 import DoctrineScreen from '../src/view/DoctrineScreens/DoctrineScreen';
 import FirstSubDoctrineScreen from '../src/view/DoctrineScreens/FirstSubDoctrineScreen';
+
+import MoreScreen from '../src/view/MoreScreens/MoreScreen';
+import ProfileScreen from '../src/view/MoreScreens/ProfileScreen';
 
 //Bible Screen Navigation Stack
 export const BibleStackScreen = () => {
@@ -92,5 +91,34 @@ export const DoctrineStackScreen = () => {
                     headerTintColor: 'white'
             })}  />
         </DoctrineStack.Navigator>
+    )
+}
+
+//More Screen Navigation Stack
+export const MoreStackScreen = () => {
+    const MoreStack = createNativeStackNavigator();
+    return(
+        <MoreStack.Navigator>
+            <MoreStack.Screen
+                name="MoreScreen" 
+                component={MoreScreen} 
+                options={({route}) => ({
+                    title: "More",
+                    headerStyle: {
+                        backgroundColor: '#333'
+                    },
+                    headerTintColor: 'white'
+            })}  />
+            <MoreStack.Screen
+                name="Profile" 
+                component={ProfileScreen} 
+                options={() => ({
+                    title: "Profile",
+                    headerStyle: {
+                        backgroundColor: '#333'
+                    },
+                    headerTintColor: 'white'
+            })}  />
+        </MoreStack.Navigator>
     )
 }
