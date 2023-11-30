@@ -1,5 +1,6 @@
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { onAuthStateChanged} from 'firebase/auth';
 import { auth } from './firebase/authConfig';
 
@@ -42,6 +43,7 @@ export default function App() {
   }, []);
 
   return (
+    <GestureHandlerRootView style={{flex: 1}}>
     <NavigationContainer>
     { user ? (
       <Tab.Navigator
@@ -86,8 +88,7 @@ export default function App() {
     )}
     <StatusBar style='light'/>
     </NavigationContainer>
-
-
+    </GestureHandlerRootView>
   );
 }
 

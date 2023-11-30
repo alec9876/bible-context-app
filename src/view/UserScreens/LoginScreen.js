@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Dimensions, ActivityIndicator, Button, StyleSheet, View, Text, TextInput, SafeAreaView } from 'react-native';
 import { login, logout } from '../../../service/authServices';
-import { auth } from '../../../firebase/authConfig';
 import { useNavigation } from '@react-navigation/native';
 
 function LoginScreen() {

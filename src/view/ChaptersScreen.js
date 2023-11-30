@@ -1,14 +1,18 @@
-import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import { collection, getDocs, query, orderBy, getDoc, doc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { Pressable, ScrollView } from "react-native";
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { db } from "../../firebase/firebaseConfig";
+import { auth } from '../../firebase/authConfig';
 
 const ChaptersScreen = ({ route, navigation }) => {
     const { itemId, collectionRef, bookName } = route.params;
     const [chapters, setChapters] = useState([]);
+    const [highlights, setHighlights] = useState([]);
     const chapterRef = collection(db, collectionRef, itemId, 'Chapters'); 
+    const userRef = doc(db, "Users", auth.currentUser.uid);
+
 
     const getChapters = async () => {
         const q = query(chapterRef, orderBy("Order"));
@@ -17,9 +21,21 @@ const ChaptersScreen = ({ route, navigation }) => {
         setChapters(mapData);
     }
 
+    const getHighlights = async () => {
+        const data = await getDoc(userRef);
+        let arr = data.data().highlights;
+        arr = arr.map(i => '#' + i );
+        console.log("arr", arr.join());
+        setHighlights(arr.join());
+    }
+
     useEffect(() => {
-        getChapters();
-    }, []);
+        const focusHandler = navigation.addListener('focus', () => {     
+            getHighlights();
+            getChapters();
+        });
+        return focusHandler;
+    }, [navigation]);
 
     return (
         <SafeAreaView style={styles.container}>
@@ -31,6 +47,7 @@ const ChaptersScreen = ({ route, navigation }) => {
                                   style={styles.box}>
                                 <Pressable
                                     onPress={() => navigation.navigate('Scripture', {
+                                        highlights: highlights,
                                         chapter: item.Chapter, 
                                         bookName: bookName, name: `${bookName} ${item.Chapter}`, 
                                         endChapter: chapters.length})}>

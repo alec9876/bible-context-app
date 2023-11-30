@@ -50,7 +50,7 @@ export const BibleStackScreen = () => {
                 options={({route}) => ({
                     title: route.params.name,
                     headerStyle: {
-                        backgroundColor: '#333'
+                        backgroundColor: '#333',
                     },
                     headerTintColor: 'white'
             })} />

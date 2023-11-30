@@ -1,38 +1,87 @@
-import React, { useEffect, useState } from "react";
-import { Pressable, ScrollView, Dimensions } from "react-native";
+import React, { useEffect, useState, useRef } from "react";
+import { Pressable, Dimensions } from "react-native";
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { getAPIVerse } from "../../service/APICalls";
 import { FontAwesome5 } from '@expo/vector-icons';
 import { StackActions } from '@react-navigation/native';
+import { WebView } from 'react-native-webview';
+import { doc, arrayUnion, updateDoc } from "firebase/firestore";
+import { db } from "../../firebase/firebaseConfig";
+import { auth } from '../../firebase/authConfig';
+
 
 const { height: windowHeight } = Dimensions.get("window");
 
 const VerseScreen = ({ navigation, route }) => {
-    const { chapter, bookName, endChapter } = route.params;
-    const [verses, setVerses] = useState([]);
+    const { chapter, bookName, endChapter, highlights } = route.params;
+    const [verses, setVerses] = useState("");
     const [nextChapter, setNextChapter] = useState(
         nextChapter === undefined ? chapter : nextChapter);
+    const userRef = doc(db, "Users", auth.currentUser.uid);
+    const webviewRef = useRef(false);
+
+    
 
     const getChapter = async (currentChapter) => {
         const scripture = await getAPIVerse(bookName, currentChapter);
-        setVerses(scripture);
+        console.log("highlights", highlights);
+        setVerses(scripture.passages.toString());
+    };
+
+    const addHighlight = async (highlight) => {
+        console.log("clicked");
+        await updateDoc(userRef, {
+            highlights: arrayUnion(highlight) 
+        })
     }
+
+    const onMessage = (data) => {
+        str = data.nativeEvent.data
+        console.log("str", str);
+        addHighlight(str);
+    }
+
+    const cssText =  `
+        document.querySelectorAll("p, h3")
+        .forEach(e => {
+            e.style.color='white';
+        });
+
+        document.querySelectorAll("${highlights}")
+        .forEach(e => {
+            e.style.color='yellow';
+        }); 
+
+        var boldClick = document.querySelectorAll("b");
+        for(var i=0; i<boldClick.length; i++){
+            boldClick[i].onclick = myfunction;
+        }
+
+        function myfunction (){
+            document.querySelectorAll("#" + this.id)
+            .forEach(e => {
+                e.style.color='yellow';
+            }); 
+            window.ReactNativeWebView.postMessage(this.id);
+        }
+    `;
 
     useEffect(() => {
         getChapter(nextChapter);
         navigation.setOptions({ title: `${bookName} ${nextChapter}` })
-    }, [nextChapter]);
+    }, [nextChapter], [highlights]);
 
     return (
         <SafeAreaView style={styles.container}>
-            <ScrollView>
-                <View>
-                    <Text style={styles.fontStyle}>
-                        {verses.passages}
-                    </Text>
-                </View>
-            </ScrollView>
+            <WebView style={styles.html}
+                     scalesPageToFit={false}
+                     originWhitelist={['*']}
+                     source={{ html: verses}}
+                     onMessage={onMessage}
+                     injectedJavaScript={cssText}
+                     javaScriptEnabledAndroid={true}
+                     ref={webviewRef}/>
             <View style={styles.iconBackground}>
                 {nextChapter < endChapter ? (
                 <View style={styles.rightIcon}>
@@ -67,7 +116,7 @@ const VerseScreen = ({ navigation, route }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'black'
+        marginTop: -25
     },
     fontStyle: {
         color: 'white',
@@ -117,6 +166,10 @@ const styles = StyleSheet.create({
     iconBackground: {
         backgroundColor: 'black',
         height: windowHeight * 0.1
+    },
+    html: {
+        flex: 1,
+        backgroundColor: 'black',
     }
 });
 
