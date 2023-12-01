@@ -24,9 +24,11 @@ const ChaptersScreen = ({ route, navigation }) => {
     const getHighlights = async () => {
         const data = await getDoc(userRef);
         let arr = data.data().highlights;
-        arr = arr.map(i => '#' + i );
-        console.log("arr", arr.join());
-        setHighlights(arr.join());
+        if(arr) {
+            arr = arr.map(i => '#' + i );
+            console.log("arr", arr.join());
+            setHighlights(arr.join());
+        }
     }
 
     useEffect(() => {

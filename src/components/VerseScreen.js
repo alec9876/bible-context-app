@@ -3,13 +3,13 @@ import { Pressable, Dimensions } from "react-native";
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { getAPIVerse } from "../../service/APICalls";
-import { FontAwesome5 } from '@expo/vector-icons';
+import { FontAwesome5, Ionicons } from '@expo/vector-icons';
 import { StackActions } from '@react-navigation/native';
 import { WebView } from 'react-native-webview';
 import { doc, arrayUnion, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
 import { auth } from '../../firebase/authConfig';
-
+import Toast from 'react-native-simple-toast';
 
 const { height: windowHeight } = Dimensions.get("window");
 
@@ -20,8 +20,6 @@ const VerseScreen = ({ navigation, route }) => {
         nextChapter === undefined ? chapter : nextChapter);
     const userRef = doc(db, "Users", auth.currentUser.uid);
     const webviewRef = useRef(false);
-
-    
 
     const getChapter = async (currentChapter) => {
         const scripture = await getAPIVerse(bookName, currentChapter);
@@ -39,6 +37,10 @@ const VerseScreen = ({ navigation, route }) => {
     const onMessage = (data) => {
         str = data.nativeEvent.data
         console.log("str", str);
+        Toast.showWithGravityAndOffset(`Verse Saved!`, 
+                    Toast.LONG, Toast.TOP, 25, 25, {
+                        tapToDismissEnabled: true,
+                    });
         addHighlight(str);
     }
 
@@ -48,10 +50,12 @@ const VerseScreen = ({ navigation, route }) => {
             e.style.color='white';
         });
 
-        document.querySelectorAll("${highlights}")
-        .forEach(e => {
-            e.style.color='yellow';
-        }); 
+        if("${highlights}") {
+            document.querySelectorAll("${highlights}")
+            .forEach(e => {
+                e.style.color='yellow';
+            }); 
+        }
 
         var boldClick = document.querySelectorAll("b");
         for(var i=0; i<boldClick.length; i++){
