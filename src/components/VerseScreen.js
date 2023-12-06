@@ -6,7 +6,7 @@ import { getAPIVerse } from "../../service/APICalls";
 import { FontAwesome5, Ionicons } from '@expo/vector-icons';
 import { StackActions } from '@react-navigation/native';
 import { WebView } from 'react-native-webview';
-import { doc, arrayUnion, updateDoc } from "firebase/firestore";
+import { doc, arrayUnion, updateDoc, arrayRemove, getDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
 import { auth } from '../../firebase/authConfig';
 import Toast from 'react-native-simple-toast';
@@ -14,46 +14,78 @@ import Toast from 'react-native-simple-toast';
 const { height: windowHeight } = Dimensions.get("window");
 
 const VerseScreen = ({ navigation, route }) => {
-    const { chapter, bookName, endChapter, highlights } = route.params;
+    const { chapter, bookName, endChapter, interHighlights } = route.params;
     const [verses, setVerses] = useState("");
+    const [savedHighlights, setSavedHighlights] = useState([]);
     const [nextChapter, setNextChapter] = useState(
         nextChapter === undefined ? chapter : nextChapter);
     const userRef = doc(db, "Users", auth.currentUser.uid);
-    const webviewRef = useRef(false);
+    const webViewRef = useRef(null);
 
+    const getHighlights = async () => {
+        const data = await getDoc(userRef);
+        let arr = data.data().highlights;
+        setSavedHighlights(arr);
+    }
     const getChapter = async (currentChapter) => {
+        console.log(interHighlights);
         const scripture = await getAPIVerse(bookName, currentChapter);
-        console.log("highlights", highlights);
         setVerses(scripture.passages.toString());
     };
 
     const addHighlight = async (highlight) => {
-        console.log("clicked");
+        console.log("added");
+        Toast.showWithGravityAndOffset(`Verse Saved`, 
+            Toast.SHORT, Toast.TOP, 25, 25,{
+                tapToDismissEnabled: true,
+            }
+        );
         await updateDoc(userRef, {
             highlights: arrayUnion(highlight) 
         })
+        getHighlights();
+    }
+
+    const removeHighlight = async (highlight) => {
+        console.log("removed");
+        Toast.showWithGravityAndOffset(`Verse Removed`, 
+            Toast.SHORT, Toast.TOP, 25, 25,{
+                tapToDismissEnabled: true,
+            }
+        );
+        await updateDoc(userRef, {
+            highlights: arrayRemove(highlight)
+        })
+        getHighlights();
     }
 
     const onMessage = (data) => {
         str = data.nativeEvent.data
-        console.log("str", str);
-        Toast.showWithGravityAndOffset(`Verse Saved!`, 
-                    Toast.LONG, Toast.TOP, 25, 25, {
-                        tapToDismissEnabled: true,
-                    });
-        addHighlight(str);
+        if(!savedHighlights.includes(str)){
+            addHighlight(str);
+        } else {
+            removeHighlight(str);
+        }
     }
 
     const cssText =  `
+    // window.onload = (event) => {
+    //     if (window.ReactNativeWebView.injectedObjectJson()) {
+    //         const highlight = JSON.parse(window.ReactNativeWebView.injectedObjectJson()).highlight;
+    //         alert(highlight);
+    //     }
+    // }
+        let highlight = ${interHighlights}.slice();
         document.querySelectorAll("p, h3")
         .forEach(e => {
             e.style.color='white';
         });
 
-        if("${highlights}") {
-            document.querySelectorAll("${highlights}")
+        if(highlight) {
+            document.querySelectorAll(highlight)
             .forEach(e => {
                 e.style.color='yellow';
+                e.style.fontSize='20px';
             }); 
         }
 
@@ -62,19 +94,30 @@ const VerseScreen = ({ navigation, route }) => {
             boldClick[i].onclick = myfunction;
         }
 
-        function myfunction (){
-            document.querySelectorAll("#" + this.id)
-            .forEach(e => {
-                e.style.color='yellow';
-            }); 
+        function myfunction(){
+            if(highlight.includes("#" + this.id)){
+                document.querySelectorAll("#" + this.id)
+                .forEach(e => {
+                    e.style.color='white';
+                    e.style.fontSize='17px';                
+                }); 
+            } else {
+                document.querySelectorAll("#" + this.id)
+                .forEach(e => {
+                    e.style.color='yellow';
+                    e.style.fontSize='20px';
+                }); 
+            } 
             window.ReactNativeWebView.postMessage(this.id);
         }
+        true;
     `;
 
     useEffect(() => {
+        getHighlights();
         getChapter(nextChapter);
-        navigation.setOptions({ title: `${bookName} ${nextChapter}` })
-    }, [nextChapter], [highlights]);
+        navigation.setOptions({ title: `${bookName} ${nextChapter}` });
+    }, [nextChapter], [savedHighlights]);
 
     return (
         <SafeAreaView style={styles.container}>
@@ -84,8 +127,14 @@ const VerseScreen = ({ navigation, route }) => {
                      source={{ html: verses}}
                      onMessage={onMessage}
                      injectedJavaScript={cssText}
+                    //  injectedJavaScriptBeforeContentLoaded={
+                    //     `window.highlights = "${savedHighlights.map(i => '#' + i), console.log("beforeContent")}";`
+                    // }
+                     injectedJavaScriptObject={{highlight: "#v01001007-1"}}
+                     //onLoadStart={onLoadEnd}
+                     //onLoadEnd={onLoadEnd}
                      javaScriptEnabledAndroid={true}
-                     ref={webviewRef}/>
+                     ref={webViewRef}/>
             <View style={styles.iconBackground}>
                 {nextChapter < endChapter ? (
                 <View style={styles.rightIcon}>
@@ -109,7 +158,7 @@ const VerseScreen = ({ navigation, route }) => {
                     <Pressable 
                         onPress={async () => navigation.dispatch(StackActions.popToTop())}
                         style={styles.middleButton}>
-                        <Text style={styles.middleButtonText}>Back to Book Selection</Text>
+                        <Text style={styles.middleButtonText}>Back to Books</Text>
                     </Pressable>
                 </View>
             </View>

@@ -21,7 +21,8 @@ function RegistrationScreen() {
             setDoc(doc(db, "Users", id), {
                 FirstName: firstName,
                 LastName: lastName,
-                Email: email
+                Email: email,
+                Highlights: ["v0000"]
             });
         } catch (error) {
             console.log("DataError", error);

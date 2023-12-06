@@ -10,6 +10,7 @@ const ChaptersScreen = ({ route, navigation }) => {
     const { itemId, collectionRef, bookName } = route.params;
     const [chapters, setChapters] = useState([]);
     const [highlights, setHighlights] = useState([]);
+    const [interHighlights, setInterHighlights] = useState([]);
     const chapterRef = collection(db, collectionRef, itemId, 'Chapters'); 
     const userRef = doc(db, "Users", auth.currentUser.uid);
 
@@ -25,9 +26,9 @@ const ChaptersScreen = ({ route, navigation }) => {
         const data = await getDoc(userRef);
         let arr = data.data().highlights;
         if(arr) {
-            arr = arr.map(i => '#' + i );
-            console.log("arr", arr.join());
-            setHighlights(arr.join());
+            let newArr = arr.map(i => '#' + i );
+            setHighlights(newArr.join());
+            setInterHighlights(JSON.stringify(newArr));
         }
     }
 
@@ -50,6 +51,7 @@ const ChaptersScreen = ({ route, navigation }) => {
                                 <Pressable
                                     onPress={() => navigation.navigate('Scripture', {
                                         highlights: highlights,
+                                        interHighlights: interHighlights,
                                         chapter: item.Chapter, 
                                         bookName: bookName, name: `${bookName} ${item.Chapter}`, 
                                         endChapter: chapters.length})}>
