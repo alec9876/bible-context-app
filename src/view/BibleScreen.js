@@ -46,7 +46,6 @@ function BibleScreen({ navigation }) {
                             <Pressable
                                 style={styles.closeFormat}
                                 onPress={() => setModalVisible(false)}>
-                                <Text style={styles.closeStyle}>Close</Text>
                             </Pressable>
                             <BibleModalScreen />
                         </View>

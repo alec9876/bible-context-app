@@ -3,13 +3,15 @@ import { Pressable, Dimensions } from "react-native";
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { getAPIVerse } from "../../service/APICalls";
-import { FontAwesome5, Ionicons } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
 import { StackActions } from '@react-navigation/native';
 import { WebView } from 'react-native-webview';
 import { doc, arrayUnion, updateDoc, arrayRemove, getDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
 import { auth } from '../../firebase/authConfig';
+import Modal from 'react-native-modal';
 import Toast from 'react-native-simple-toast';
+import VerseModalScreen from "./VerseModalScreen";
 
 const { height: windowHeight } = Dimensions.get("window");
 
@@ -20,6 +22,7 @@ const VerseScreen = ({ navigation, route }) => {
     const [nextChapter, setNextChapter] = useState(
         nextChapter === undefined ? chapter : nextChapter);
     const userRef = doc(db, "Users", auth.currentUser.uid);
+    const [modalVisible, setModalVisible] = useState(false);
     const webViewRef = useRef(null);
 
     const getHighlights = async () => {
@@ -28,7 +31,6 @@ const VerseScreen = ({ navigation, route }) => {
         setSavedHighlights(arr);
     }
     const getChapter = async (currentChapter) => {
-        console.log(interHighlights);
         const scripture = await getAPIVerse(bookName, currentChapter);
         setVerses(scripture.passages.toString());
     };
@@ -69,20 +71,20 @@ const VerseScreen = ({ navigation, route }) => {
     }
 
     const cssText =  `
-    // window.onload = (event) => {
-    //     if (window.ReactNativeWebView.injectedObjectJson()) {
-    //         const highlight = JSON.parse(window.ReactNativeWebView.injectedObjectJson()).highlight;
-    //         alert(highlight);
-    //     }
-    // }
         let highlight = ${interHighlights}.slice();
         document.querySelectorAll("p, h3")
         .forEach(e => {
             e.style.color='white';
         });
 
-        if(highlight) {
+        if(!window.highlight.length) {
             document.querySelectorAll(highlight)
+            .forEach(e => {
+                e.style.color='yellow';
+                e.style.fontSize='20px';
+            }); 
+        } else {
+            document.querySelectorAll(window.highlight)
             .forEach(e => {
                 e.style.color='yellow';
                 e.style.fontSize='20px';
@@ -95,7 +97,7 @@ const VerseScreen = ({ navigation, route }) => {
         }
 
         function myfunction(){
-            if(highlight.includes("#" + this.id)){
+            if(window.highlight.includes("#" + this.id)){
                 document.querySelectorAll("#" + this.id)
                 .forEach(e => {
                     e.style.color='white';
@@ -127,30 +129,25 @@ const VerseScreen = ({ navigation, route }) => {
                      source={{ html: verses}}
                      onMessage={onMessage}
                      injectedJavaScript={cssText}
-                    //  injectedJavaScriptBeforeContentLoaded={
-                    //     `window.highlights = "${savedHighlights.map(i => '#' + i), console.log("beforeContent")}";`
-                    // }
-                     injectedJavaScriptObject={{highlight: "#v01001007-1"}}
-                     //onLoadStart={onLoadEnd}
-                     //onLoadEnd={onLoadEnd}
+                     injectedJavaScriptBeforeContentLoaded={
+                        `window.highlight = "${savedHighlights.map(i => '#' + i)}";`
+                    }
                      javaScriptEnabledAndroid={true}
                      ref={webViewRef}/>
             <View style={styles.iconBackground}>
                 {nextChapter < endChapter ? (
                 <View style={styles.rightIcon}>
                     <Pressable 
-                        onPress={async () => getChapter(setNextChapter(parseInt(nextChapter) + 1))}
-                        style={styles.iconButton}>
-                        <FontAwesome5 name="arrow-circle-right" size={35} color="#333" />
+                        onPress={async () => getChapter(setNextChapter(parseInt(nextChapter) + 1))}>
+                        <FontAwesome5 name="arrow-alt-circle-right" size={40} color="white" />
                     </Pressable>
                 </View>
                 ) : null}
                 {nextChapter > 1 ? (
                 <View style={styles.leftIcon}>
                     <Pressable 
-                        onPress={async () => getChapter(setNextChapter(parseInt(nextChapter) - 1))}
-                        style={styles.iconButton}>
-                        <FontAwesome5 name="arrow-circle-left" size={35} color="#333"/>
+                        onPress={async () => getChapter(setNextChapter(parseInt(nextChapter) - 1))}>
+                        <FontAwesome5 name="arrow-alt-circle-left" size={40} color="white"/>
                     </Pressable>
                 </View>
                 ) : null}
@@ -159,6 +156,26 @@ const VerseScreen = ({ navigation, route }) => {
                         onPress={async () => navigation.dispatch(StackActions.popToTop())}
                         style={styles.middleButton}>
                         <Text style={styles.middleButtonText}>Back to Books</Text>
+                    </Pressable>
+                </View>
+                <View style={styles.modalButtonStyle}>
+                    <Modal
+                        style={styles.modalStyle}
+                        isVisible={modalVisible}
+                        onBackdropPress={() => setModalVisible(false)}>
+                        <View style={styles.modalPosition}>
+                            <View style={styles.modalFormat}>
+                                <Pressable
+                                    style={styles.closeFormat}
+                                    onPress={() => setModalVisible(false)}>
+                                </Pressable>
+                                <VerseModalScreen />
+                            </View>
+                        </View>
+                    </Modal>
+                    <Pressable
+                        onPress={() => setModalVisible(true)}>
+                        <FontAwesome5 name="question" size={35} color="white" />
                     </Pressable>
                 </View>
             </View>
@@ -188,22 +205,15 @@ const styles = StyleSheet.create({
         bottom: 15,
         left: 25,
     },
-    iconButton: {
-        backgroundColor: 'white',
-        borderRadius: 15,
-        border: 'solid',
-        borderWidth: 4,
-        borderColor: '#333'
-    },
     middleButtonStyle: {
         position: 'absolute',
-        bottom: 15,
+        bottom: 12,
         left: 107.5,
     },
     middleButton: {
         backgroundColor: 'salmon',
         borderRadius: 20,
-        width: 200,
+        width: 130,
         alignItems: 'center',
         border: 'solid',
         borderColor: '#333',
@@ -223,7 +233,33 @@ const styles = StyleSheet.create({
     html: {
         flex: 1,
         backgroundColor: 'black',
-    }
+    },
+    modalButtonStyle: {
+        position: 'absolute',
+        bottom: 17,
+        right: 115.5,
+    },
+    modalStyle: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 20,
+        margin: 0
+    },
+    modalPosition: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+    }, 
+    modalFormat: {
+        width: 300,
+        height: 250,
+        borderColor: 'salmon',
+        borderWidth: 3,
+        borderRadius: 10,
+        border: 'solid',
+        overflow: 'hidden'
+    },
 });
 
 export default VerseScreen;
