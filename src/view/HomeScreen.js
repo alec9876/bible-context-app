@@ -19,7 +19,8 @@ const HomeScreen = () => {
             const item = mapData[randomIndex];
             setPassages(item);
             const result = await getAPIMemoryVerse(item.BookName, item.Verse);
-            setMemoryVerses(result);
+            const scripture = result.passages.toString().replace(/[\[\]][\]0-9]+/g,'');
+            setMemoryVerses(scripture);
         };
         getVerses();
     }, []);
@@ -31,7 +32,7 @@ const HomeScreen = () => {
                 <Text style={styles.cardHeaderStyle}>{passages.BookName} {passages.Verse}</Text>
                 <Card.Divider />
                 <Text style={styles.cardTextStyle}>
-                    {memoryVerses.passages} 
+                    {memoryVerses} 
                 </Text>
             </Card>
         </View>
