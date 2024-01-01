@@ -11,7 +11,7 @@ import { db } from "../../firebase/firebaseConfig";
 import { auth } from '../../firebase/authConfig';
 import Modal from 'react-native-modal';
 import Toast from 'react-native-simple-toast';
-import VerseModalScreen from "./VerseModalScreen";
+import VerseModalScreen from "./modal/VerseModalScreen";
 
 const { height: windowHeight } = Dimensions.get("window");
 
@@ -31,6 +31,7 @@ const VerseScreen = ({ navigation, route }) => {
         setSavedHighlights(arr);
     }
     const getChapter = async (currentChapter) => {
+        console.log("highlights", savedHighlights);
         const scripture = await getAPIVerse(bookName, currentChapter);
         setVerses(scripture.passages.toString());
     };

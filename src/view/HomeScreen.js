@@ -19,7 +19,7 @@ const HomeScreen = () => {
             const item = mapData[randomIndex];
             setPassages(item);
             const result = await getAPIMemoryVerse(item.BookName, item.Verse);
-            const scripture = result.passages.toString().replace(/[\[\]][\]0-9]+/g,'');
+            const scripture = result.passages;
             setMemoryVerses(scripture);
         };
         getVerses();
