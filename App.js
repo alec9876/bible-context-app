@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { onAuthStateChanged} from 'firebase/auth';
 import { auth } from './firebase/authConfig';
-
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -60,7 +59,7 @@ export default function App() {
             } else if (route.name === 'Doctrine') {
                 iconName = focused ? 'document-text' : 'document-text-outline'
             } else if (route.name === 'More') {
-                iconName = focused ? 'md-ellipsis-horizontal-sharp' : 'md-ellipsis-horizontal-outline'
+                iconName = focused ? 'ellipsis-horizontal-sharp' : 'ellipsis-horizontal-outline'
             }
 
             return <Ionicons name={iconName} size={size} color={color} />
