@@ -22,7 +22,8 @@ function RegistrationScreen() {
                 FirstName: firstName,
                 LastName: lastName,
                 Email: email,
-                Highlights: ["v0000"]
+                Highlights: ["v0000"],
+                ImageId: "none"
             });
         } catch (error) {
             console.log("DataError", error);

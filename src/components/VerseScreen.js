@@ -27,9 +27,10 @@ const VerseScreen = ({ navigation, route }) => {
 
     const getHighlights = async () => {
         const data = await getDoc(userRef);
-        let arr = data.data().highlights;
+        let arr = data.data().Highlights;
         setSavedHighlights(arr);
     }
+
     const getChapter = async (currentChapter) => {
         console.log("highlights", savedHighlights);
         const scripture = await getAPIVerse(bookName, currentChapter);
@@ -40,11 +41,11 @@ const VerseScreen = ({ navigation, route }) => {
         console.log("added");
         Toast.showWithGravityAndOffset(`Verse Saved`, 
             Toast.SHORT, Toast.TOP, 25, 25,{
-                tapToDismissEnabled: true,
+                tapToDismissEnabled: true
             }
         );
         await updateDoc(userRef, {
-            highlights: arrayUnion(highlight) 
+            Highlights: arrayUnion(highlight) 
         })
         getHighlights();
     }
@@ -63,6 +64,7 @@ const VerseScreen = ({ navigation, route }) => {
     }
 
     const onMessage = (data) => {
+        console.log("data", data);
         str = data.nativeEvent.data
         if(!savedHighlights.includes(str)){
             addHighlight(str);
@@ -73,7 +75,8 @@ const VerseScreen = ({ navigation, route }) => {
 
     const cssText =  `
         let highlight = ${interHighlights}.slice();
-        document.querySelectorAll("p, h3")
+
+        document.querySelectorAll('p, h3')
         .forEach(e => {
             e.style.color='white';
         });

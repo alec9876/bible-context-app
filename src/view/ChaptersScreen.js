@@ -24,7 +24,7 @@ const ChaptersScreen = ({ route, navigation }) => {
 
     const getHighlights = async () => {
         const data = await getDoc(userRef);
-        let arr = data.data().highlights;
+        let arr = data.data().Highlights;
         if(arr) {
             let newArr = arr.map(i => '#' + i );
             setHighlights(newArr.join());
