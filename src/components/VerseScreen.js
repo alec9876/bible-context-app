@@ -58,7 +58,7 @@ const VerseScreen = ({ navigation, route }) => {
             }
         );
         await updateDoc(userRef, {
-            highlights: arrayRemove(highlight)
+            Highlights: arrayRemove(highlight)
         })
         getHighlights();
     }
@@ -101,18 +101,12 @@ const VerseScreen = ({ navigation, route }) => {
         }
 
         function myfunction(){
-            if(window.highlight.includes("#" + this.id)){
-                document.querySelectorAll("#" + this.id)
-                .forEach(e => {
-                    e.style.color='white';
-                    e.style.fontSize='17px';                
-                }); 
+            if(this.style.color === 'yellow'){
+                this.style.color = 'white';
+                this.style.fontSize = '17px'; 
             } else {
-                document.querySelectorAll("#" + this.id)
-                .forEach(e => {
-                    e.style.color='yellow';
-                    e.style.fontSize='20px';
-                }); 
+                this.style.color='yellow';
+                this.style.fontSize='20px';
             } 
             window.ReactNativeWebView.postMessage(this.id);
         }
