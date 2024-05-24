@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
+import { useFocusEffect } from '@react-navigation/native';
 import { Pressable, Dimensions } from "react-native";
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -19,13 +20,13 @@ const VerseScreen = ({ navigation, route }) => {
     const { chapter, bookName, endChapter, interHighlights } = route.params;
     const [verses, setVerses] = useState("");
     const [savedHighlights, setSavedHighlights] = useState([]);
-    const [nextChapter, setNextChapter] = useState(
-        nextChapter === undefined ? chapter : nextChapter);
+    const [nextChapter, setNextChapter] = useState(chapter);
     const userRef = doc(db, "Users", auth.currentUser.uid);
     const [modalVisible, setModalVisible] = useState(false);
     const webViewRef = useRef(null);
 
     const getHighlights = async () => {
+        console.log("getHighlights");
         const data = await getDoc(userRef);
         let arr = data.data().Highlights;
         setSavedHighlights(arr);
@@ -36,6 +37,14 @@ const VerseScreen = ({ navigation, route }) => {
         const scripture = await getAPIVerse(bookName, currentChapter);
         setVerses(scripture.passages.toString());
     };
+
+    const incrementChapter = () => {
+        setNextChapter(parseInt(nextChapter) + 1)
+    }
+
+    const decrementChapter = () => {
+        setNextChapter(parseInt(nextChapter) - 1)
+    }
 
     const addHighlight = async (highlight) => {
         console.log("added");
@@ -113,9 +122,18 @@ const VerseScreen = ({ navigation, route }) => {
         true;
     `;
 
+    // useFocusEffect(
+    //     useCallback(() => {
+    //         getHighlights();
+    //         getChapter(nextChapter);
+    //         console.log("focus");
+    //     }, [nextChapter])
+    // );
+
     useEffect(() => {
         getHighlights();
         getChapter(nextChapter);
+        console.log("useEffect");
         navigation.setOptions({ title: `${bookName} ${nextChapter}` });
     }, [nextChapter], [savedHighlights]);
 
@@ -136,7 +154,7 @@ const VerseScreen = ({ navigation, route }) => {
                 {nextChapter < endChapter ? (
                 <View style={styles.rightIcon}>
                     <Pressable 
-                        onPress={async () => getChapter(setNextChapter(parseInt(nextChapter) + 1))}>
+                        onPress={incrementChapter}>
                         <FontAwesome5 name="arrow-alt-circle-right" size={40} color="white" />
                     </Pressable>
                 </View>
@@ -144,7 +162,7 @@ const VerseScreen = ({ navigation, route }) => {
                 {nextChapter > 1 ? (
                 <View style={styles.leftIcon}>
                     <Pressable 
-                        onPress={async () => getChapter(setNextChapter(parseInt(nextChapter) - 1))}>
+                        onPress={decrementChapter}>
                         <FontAwesome5 name="arrow-alt-circle-left" size={40} color="white"/>
                     </Pressable>
                 </View>
