@@ -9,7 +9,7 @@ import { Card } from '@rneui/themed';
 import { FontAwesome5 } from '@expo/vector-icons';
 import HighlightModalScreen from '../../components/modal/HighlightModalScreen';
 
-const HighlightScreen = () => {
+const HighlightScreen = ({navigation}) => {
     const [highlights, setHighlights] = useState([]);
     const [highlightId, setHighlightId] = useState('');
     const [highlightLength, setHighlightLength] = useState();
@@ -24,7 +24,6 @@ const HighlightScreen = () => {
         let arr = data.data().Highlights;
         setHighlightLength(arr.length);
         if(arr.length > 1) {
-            console.log("inside")
             arr.shift();
             arr.forEach(e => {
                 newArr.push(e.split('v').pop().split('-')[0]); 
@@ -47,7 +46,6 @@ const HighlightScreen = () => {
         } 
     }
 
-    console.log("length", highlightLength);
     const deleteHighlight = async (highlight) => {
         await updateDoc(userRef, {
             Highlights: arrayRemove(highlight)
@@ -62,6 +60,9 @@ const HighlightScreen = () => {
     }
 
     useEffect(() => {
+        navigation.addListener('focus', () => {
+            getHighlights();
+        })
         getHighlights();
     }, [])
 
