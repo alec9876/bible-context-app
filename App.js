@@ -1,3 +1,4 @@
+import { RootSiblingParent } from 'react-native-root-siblings';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
@@ -42,6 +43,7 @@ export default function App() {
   }, []);
 
   return (
+    <RootSiblingParent>
     <GestureHandlerRootView style={{flex: 1}}>
     <NavigationContainer>
     { user ? (
@@ -88,6 +90,7 @@ export default function App() {
     <StatusBar style='light'/>
     </NavigationContainer>
     </GestureHandlerRootView>
+    </RootSiblingParent>
   );
 }
 

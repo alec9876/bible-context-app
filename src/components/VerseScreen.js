@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
-import { useFocusEffect } from '@react-navigation/native';
 import { Pressable, Dimensions } from "react-native";
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -11,7 +10,7 @@ import { doc, arrayUnion, updateDoc, arrayRemove, getDoc } from "firebase/firest
 import { db } from "../../firebase/firebaseConfig";
 import { auth } from '../../firebase/authConfig';
 import Modal from 'react-native-modal';
-import Toast from 'react-native-simple-toast';
+import Toast from 'react-native-root-toast';
 import VerseModalScreen from "./modal/VerseModalScreen";
 
 const { height: windowHeight } = Dimensions.get("window");
@@ -26,14 +25,12 @@ const VerseScreen = ({ navigation, route }) => {
     const webViewRef = useRef(null);
 
     const getHighlights = async () => {
-        console.log("getHighlights");
         const data = await getDoc(userRef);
         let arr = data.data().Highlights;
         setSavedHighlights(arr);
     }
 
     const getChapter = async (currentChapter) => {
-        console.log("highlights", savedHighlights);
         const scripture = await getAPIVerse(bookName, currentChapter);
         setVerses(scripture.passages.toString());
     };
@@ -46,13 +43,23 @@ const VerseScreen = ({ navigation, route }) => {
         setNextChapter(parseInt(nextChapter) - 1)
     }
 
+    const getToast = (message) => {
+        Toast.show(message, {
+            duration: Toast.durations.LONG,
+            position: Toast.positions.TOP,
+            shadow: true,
+            textColor: 'black',
+            shadowColor: 'black',
+            opacity: 1,
+            animation: true,
+            hideOnPress: true,
+            backgroundColor: 'white',
+            delay: 0
+        });
+    }
+
     const addHighlight = async (highlight) => {
-        console.log("added");
-        Toast.showWithGravityAndOffset(`Verse Saved`, 
-            Toast.SHORT, Toast.TOP, 25, 25,{
-                tapToDismissEnabled: true
-            }
-        );
+        getToast('Verse Saved');
         await updateDoc(userRef, {
             Highlights: arrayUnion(highlight) 
         })
@@ -60,12 +67,7 @@ const VerseScreen = ({ navigation, route }) => {
     }
 
     const removeHighlight = async (highlight) => {
-        console.log("removed");
-        Toast.showWithGravityAndOffset(`Verse Removed`, 
-            Toast.SHORT, Toast.TOP, 25, 25,{
-                tapToDismissEnabled: true,
-            }
-        );
+        getToast('Verse Removed');
         await updateDoc(userRef, {
             Highlights: arrayRemove(highlight)
         })
@@ -73,7 +75,7 @@ const VerseScreen = ({ navigation, route }) => {
     }
 
     const onMessage = (data) => {
-        console.log("data", data);
+        //console.log("data", data);
         str = data.nativeEvent.data
         if(!savedHighlights.includes(str)){
             addHighlight(str);
@@ -83,7 +85,7 @@ const VerseScreen = ({ navigation, route }) => {
     }
 
     const cssText =  `
-        let highlight = ${interHighlights}.slice();
+        let interHighlight = ${interHighlights}.slice();
 
         document.querySelectorAll('p, h3')
         .forEach(e => {
@@ -91,7 +93,7 @@ const VerseScreen = ({ navigation, route }) => {
         });
 
         if(!window.highlight.length) {
-            document.querySelectorAll(highlight)
+            document.querySelectorAll(interHighlight)
             .forEach(e => {
                 e.style.color='yellow';
                 e.style.fontSize='20px';
@@ -122,18 +124,9 @@ const VerseScreen = ({ navigation, route }) => {
         true;
     `;
 
-    // useFocusEffect(
-    //     useCallback(() => {
-    //         getHighlights();
-    //         getChapter(nextChapter);
-    //         console.log("focus");
-    //     }, [nextChapter])
-    // );
-
     useEffect(() => {
-        getHighlights();
         getChapter(nextChapter);
-        console.log("useEffect");
+        getHighlights();
         navigation.setOptions({ title: `${bookName} ${nextChapter}` });
     }, [nextChapter], [savedHighlights]);
 
