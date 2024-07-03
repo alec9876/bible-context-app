@@ -46,9 +46,12 @@ const FirstSubDoctrine = ({ route, navigation }) => {
                         {item.Reference.map((item, index) => {
                             return(
                             <View key={index}>
+                                {item.SubTopic ?
+                                <>
                                 <Text style={styles.subTopicStyle}>{item.SubTopic}</Text>
-                                {item.Verses &&
-                                <Text style={styles.subVerseStyle}>{item.Verses.join("|").toString().split("|").join("\n")}</Text>}
+                                <Text style={styles.subVerseStyle}>{item.Verses.join("|").toString().split("|").join("\n")}</Text>
+                                </>
+                                : <Text style={styles.subTopicStyle}>{item.Verses.join("|").toString().split("|").join("\n")}</Text>}
                             </View>
                             )
                         })}
@@ -114,10 +117,11 @@ const styles = StyleSheet.create({
         borderRadius: 25,
         marginVertical: '3%',
         marginHorizontal: '3.3%',
-        padding: 5
+        padding: 10
     },
     titleStyle: {
         fontSize: 25,
+        margin: 10,
         color: 'white',
         textAlign: 'center',
     },
