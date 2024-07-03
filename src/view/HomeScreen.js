@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from 'react-native';
 import { db } from "../../firebase/firebaseConfig";
 import { Card } from '@rneui/themed';
-import { getAPIMemoryVerse } from "../../service/APICalls";
+import { getAPITextVerse } from "../../service/APICalls";
 
 const HomeScreen = () => {
 
@@ -18,7 +18,7 @@ const HomeScreen = () => {
             const randomIndex = Math.floor(Math.random() * mapData.length);
             const item = mapData[randomIndex];
             setPassages(item);
-            const result = await getAPIMemoryVerse(item.BookName, item.Verse);
+            const result = await getAPITextVerse(item.BookName, item.Verse);
             const scripture = result.passages;
             setMemoryVerses(scripture);
         };

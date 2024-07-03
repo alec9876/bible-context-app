@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View, Pressable, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { getAPIVerse } from "../../service/APICalls";
+import { getAPITextVerse } from "../../service/APICalls";
 
 const SectionVerseScreen = ({ navigation, route}) => {
     const { chapter, bookName, endChapter } = route.params;
@@ -9,7 +9,7 @@ const SectionVerseScreen = ({ navigation, route}) => {
     const re = new RegExp(/[?<=abc\s](\d+)/g)
 
     const getScripture = async () => {
-        const scripture = await getAPIVerse(bookName, chapter);
+        const scripture = await getAPITextVerse(bookName, chapter);
         setVerses(scripture);
     }
 
@@ -26,7 +26,7 @@ const SectionVerseScreen = ({ navigation, route}) => {
                         bookName: bookName, name: `${bookName} ${verses.query.match(re)}`, 
                         endChapter: endChapter})}
                     style={styles.middleButton}>
-                    <Text style={styles.middleButtonText}>Full Chapters</Text>
+                    <Text style={styles.middleButtonText}>Full Chapter</Text>
                 </Pressable>
             </View>
             <ScrollView>
