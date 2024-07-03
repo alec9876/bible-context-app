@@ -81,7 +81,7 @@ const styles = StyleSheet.create ({
         justifyContent: 'center',
         alignItems: 'center',
         marginVertical: '3%',
-        marginHorizontal: '3.3%'
+        marginHorizontal: '5%'
     },
     chapterNumber: {
         fontSize: 30,
@@ -90,6 +90,7 @@ const styles = StyleSheet.create ({
     row: {
         flexDirection: 'row',
         flexWrap: 'wrap',
+        justifyContent: 'center'
 
     }
 })
