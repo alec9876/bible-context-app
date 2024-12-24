@@ -73,7 +73,7 @@ const QuizScreen = () => {
                         </Pressable>
                     </View>
                 ) : (
-                    <View style={styles.container}>
+                    <View style={styles.viewContainer}>
                         <Text style={styles.resultText}>Quiz Completed!</Text>
                         <Text style={styles.scoreText}>Score: {score}/{quiz.length}</Text>
                         <Button title="Restart Quiz" onPress={restartQuiz} />
