@@ -31,6 +31,7 @@ const VerseScreen = ({ navigation, route }) => {
     }
 
     const getChapter = async (currentChapter) => {
+        console.log("chapter", currentChapter);
         const scripture = await getAPIVerse(bookName, currentChapter);
         setVerses(scripture.passages.toString());
     };
@@ -75,7 +76,7 @@ const VerseScreen = ({ navigation, route }) => {
     }
 
     const onMessage = (data) => {
-        //console.log("data", data);
+        console.log("data", data);
         str = data.nativeEvent.data
         if(!savedHighlights.includes(str)){
             addHighlight(str);
@@ -125,11 +126,12 @@ const VerseScreen = ({ navigation, route }) => {
     `;
 
     useEffect(() => {
-        getChapter(nextChapter);
         getHighlights();
+        console.log("nextchap", nextChapter);        
+        getChapter(nextChapter);
         navigation.setOptions({ title: `${bookName} ${nextChapter}` });
     }, [nextChapter], [savedHighlights]);
-
+    
     return (
         <SafeAreaView style={styles.container}>
             <WebView style={styles.html}

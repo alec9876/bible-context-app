@@ -12,6 +12,10 @@ const MoreScreen = () => {
         navigation.navigate("Profile");
     }
 
+    const handleQuiz = async () => {
+        navigation.navigate("Quiz");
+    }
+
     return (
         <SafeAreaView style={styles.container}>   
             <ScrollView style={styles.statusBarMargin}>
@@ -25,6 +29,12 @@ const MoreScreen = () => {
                     <View style={styles.view}>
                         <FontAwesome name="gear" size={24} color="white" />
                         <Text style={styles.text}>Settings</Text>
+                    </View>
+                </Pressable>
+                <Pressable onPress={handleQuiz}>
+                    <View style={styles.view}>
+                        <MaterialIcons name="quiz" size={24} color="white" />
+                        <Text style={styles.text}>Quiz</Text>
                     </View>
                 </Pressable>
                 <Pressable onPress={logout}>

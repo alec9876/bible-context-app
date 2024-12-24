@@ -36,9 +36,9 @@ function DoctrineScreen({ navigation }) {
                                         subject: item.Subject,
                                         name: `Doctrine of ${item.Subject}`,
                                     })}>  
-                                    <Text style={styles.subjectStyle}>
-                                        {item.Subject}
-                                    </Text>
+                                        <Text style={styles.subjectStyle}>
+                                            {item.Subject}
+                                        </Text>
                                 </Pressable>
                             </View>
                         );
@@ -70,12 +70,15 @@ const styles = StyleSheet.create({
         marginHorizontal: '3.3%'
     },
     pressableStyle: {
+        height: '100%',
+        width: '100%',
         alignItems: 'center'
     },
     subjectStyle: {
         fontSize: 25,
         color: 'white',
         textAlign: 'center',
+        paddingTop: '7.5%'
     },
 });
 

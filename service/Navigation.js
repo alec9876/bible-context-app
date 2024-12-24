@@ -12,6 +12,7 @@ import FirstSubDoctrineScreen from '../src/view/DoctrineScreens/FirstSubDoctrine
 import MoreScreen from '../src/view/MoreScreens/MoreScreen';
 import ProfileScreen from '../src/view/MoreScreens/ProfileScreen';
 import HighlightScreen from '../src/view/MoreScreens/HighlightScreen';
+import QuizScreen from '../src/view/MoreScreens/QuizScreen';
 
 //Bible Screen Navigation Stack
 export const BibleStackScreen = () => {
@@ -115,6 +116,16 @@ export const MoreStackScreen = () => {
                 component={ProfileScreen} 
                 options={() => ({
                     title: "Profile",
+                    headerStyle: {
+                        backgroundColor: '#333'
+                    },
+                    headerTintColor: 'white'
+            })}  />
+            <MoreStack.Screen
+                name="Quiz" 
+                component={QuizScreen} 
+                options={() => ({
+                    title: "Quiz",
                     headerStyle: {
                         backgroundColor: '#333'
                     },
