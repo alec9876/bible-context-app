@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "yjoadesdg9Q=",
+  "success": true,
+  "projectFilePath": "/Users/AlecSchram/Projects/bible-context/server/API/API.csproj",
+  "expectedPackageFiles": [
+    "/Users/AlecSchram/.nuget/packages/microsoft.aspnetcore.openapi/9.0.3/microsoft.aspnetcore.openapi.9.0.3.nupkg.sha512",
+    "/Users/AlecSchram/.nuget/packages/microsoft.openapi/1.6.17/microsoft.openapi.1.6.17.nupkg.sha512"
+  ],
+  "logs": []
+}
