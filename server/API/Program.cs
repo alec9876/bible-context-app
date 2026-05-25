@@ -1,6 +1,26 @@
+using System;
+using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
+using Application.Settings;
+using Scalar.AspNetCore;
+using API.Middleware;
+using Application.Interfaces.Services;
+using Application.Services;
+using Application.Interfaces.Repositories;
+using Infrastructure.Repositories;
+using DotNetEnv;
+
+Env.Load();
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.Configure<ScriptureAPISettings>(
+    builder.Configuration.GetSection("BibleApi"));
+
+builder.Services.AddScoped<IUserService, UsersServices>();
+builder.Services.AddScoped<IUserRepository, UsersRepository>();
+builder.Services.AddDbContext<AppDbContext>(options => 
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -12,12 +32,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference(); //UI at /scalar/v1
 }
 
-app.UseHttpsRedirection();
-
+app.UseMiddleware<ExceptionMiddleware>();
+app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

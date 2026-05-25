@@ -81,3 +81,5 @@ web-build/
 dist/
 
 # @end expo-cli
+server/API/api.env
+.gitignore

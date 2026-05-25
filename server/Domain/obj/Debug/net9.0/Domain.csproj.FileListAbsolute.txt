@@ -1,0 +1,12 @@
+/Users/AlecSchram/Projects/bible-context/server/Domain/bin/Debug/net9.0/Domain.deps.json
+/Users/AlecSchram/Projects/bible-context/server/Domain/bin/Debug/net9.0/Domain.dll
+/Users/AlecSchram/Projects/bible-context/server/Domain/bin/Debug/net9.0/Domain.pdb
+/Users/AlecSchram/Projects/bible-context/server/Domain/obj/Debug/net9.0/Domain.GeneratedMSBuildEditorConfig.editorconfig
+/Users/AlecSchram/Projects/bible-context/server/Domain/obj/Debug/net9.0/Domain.AssemblyInfoInputs.cache
+/Users/AlecSchram/Projects/bible-context/server/Domain/obj/Debug/net9.0/Domain.AssemblyInfo.cs
+/Users/AlecSchram/Projects/bible-context/server/Domain/obj/Debug/net9.0/Domain.csproj.CoreCompileInputs.cache
+/Users/AlecSchram/Projects/bible-context/server/Domain/obj/Debug/net9.0/Domain.sourcelink.json
+/Users/AlecSchram/Projects/bible-context/server/Domain/obj/Debug/net9.0/Domain.dll
+/Users/AlecSchram/Projects/bible-context/server/Domain/obj/Debug/net9.0/refint/Domain.dll
+/Users/AlecSchram/Projects/bible-context/server/Domain/obj/Debug/net9.0/Domain.pdb
+/Users/AlecSchram/Projects/bible-context/server/Domain/obj/Debug/net9.0/ref/Domain.dll

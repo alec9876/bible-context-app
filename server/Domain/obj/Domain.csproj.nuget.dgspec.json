@@ -44,12 +44,6 @@
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
-          "dependencies": {
-            "Google.Cloud.Firestore": {
-              "target": "Package",
-              "version": "[3.10.0, )"
-            }
-          },
           "imports": [
             "net461",
             "net462",
